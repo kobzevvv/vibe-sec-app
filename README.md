@@ -19,7 +19,7 @@ Sits in your menu bar and shows the security status of your machine at a glance:
 **Option A — One-liner (easiest)**
 
 ```bash
-curl -sL $(curl -s https://api.github.com/repos/kobzevvv/vibe-sec-app/releases/latest | grep browser_download_url | cut -d'"' -f4) -o /tmp/VibeSec.zip && unzip -oq /tmp/VibeSec.zip -d /Applications && xattr -cr /Applications/VibeSec.app && open /Applications/VibeSec.app
+pkill -x VibeSec 2>/dev/null; curl -sL $(curl -s https://api.github.com/repos/kobzevvv/vibe-sec-app/releases/latest | grep browser_download_url | cut -d'"' -f4) -o /tmp/VibeSec.zip && unzip -oq /tmp/VibeSec.zip -d /Applications && xattr -cr /Applications/VibeSec.app && open /Applications/VibeSec.app
 ```
 
 **Option B — Manual download**
