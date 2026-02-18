@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  release:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: swift build -c release
+
+      - name: Package
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          mkdir -p VibeSec.app/Contents/MacOS VibeSec.app/Contents/Resources
+          cp .build/release/VibeSec VibeSec.app/Contents/MacOS/VibeSec
+          cp Resources/Info.plist VibeSec.app/Contents/Info.plist
+          zip -r VibeSec-${VERSION}.zip VibeSec.app
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "SHA256=$(shasum -a 256 VibeSec-${VERSION}.zip | cut -d' ' -f1)" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: VibeSec-${{ env.VERSION }}.zip
+          generate_release_notes: true
+
+      - name: Update Homebrew Tap
+        env:
+          GH_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: |
+          # Get current formula and its git SHA
+          RESPONSE=$(gh api repos/kobzevvv/homebrew-tap/contents/Casks/vibe-sec-app.rb)
+          FILE_SHA=$(echo "$RESPONSE" | python3 -c "import json,sys; print(json.load(sys.stdin)['sha'])")
+          CURRENT=$(echo "$RESPONSE" | python3 -c "import json,base64,sys; print(base64.b64decode(json.load(sys.stdin)['content']).decode())")
+
+          # Patch version, sha256, (url is version-interpolated so no change needed)
+          UPDATED=$(echo "$CURRENT" \
+            | sed "s/version \".*\"/version \"${{ env.VERSION }}\"/" \
+            | sed "s/sha256 \".*\"/sha256 \"${{ env.SHA256 }}\"/")
+
+          CONTENT=$(echo "$UPDATED" | python3 -c "import base64,sys; print(base64.b64encode(sys.stdin.buffer.read()).decode())")
+
+          gh api --method PUT repos/kobzevvv/homebrew-tap/contents/Casks/vibe-sec-app.rb \
+            -f message="chore: bump vibe-sec-app to v${{ env.VERSION }}" \
+            -f content="$CONTENT" \
+            -f sha="$FILE_SHA"
