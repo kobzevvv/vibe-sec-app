@@ -15,6 +15,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
     private var lastResult: ScanResult?
     private var acknowledgedScore: Int? = nil  // score user has already seen
     private var latestVersion: String? = nil
+    private var lastUpdateCheck: Date = .distantPast
 
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -92,7 +93,12 @@ class StatusBarController: NSObject, NSMenuDelegate {
         updateIcon(result: result)
         updateStatusArea(result: result)
         updateHookStatus()
-        checkForUpdates()
+
+        // Check GitHub for updates at most once every 6 hours
+        if Date().timeIntervalSince(lastUpdateCheck) > 6 * 3600 {
+            lastUpdateCheck = Date()
+            checkForUpdates()
+        }
     }
 
     // MARK: - Auto-Update
