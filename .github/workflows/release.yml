@@ -22,7 +22,10 @@ jobs:
           mkdir -p VibeSec.app/Contents/MacOS VibeSec.app/Contents/Resources
           cp .build/release/VibeSec VibeSec.app/Contents/MacOS/VibeSec
           cp Resources/Info.plist VibeSec.app/Contents/Info.plist
-          zip -r VibeSec-${VERSION}.zip VibeSec.app
+          # Ad-hoc sign to prevent macOS "damaged" error on download
+          codesign --force --deep -s - VibeSec.app
+          xattr -cr VibeSec.app
+          ditto -c -k --keepParent VibeSec.app VibeSec-${VERSION}.zip
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "SHA256=$(shasum -a 256 VibeSec-${VERSION}.zip | cut -d' ' -f1)" >> $GITHUB_ENV
 
