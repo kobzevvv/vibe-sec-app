@@ -5,7 +5,8 @@ class StatusBarController: NSObject, NSMenuDelegate {
     private let menu: NSMenu
     private let statusMenuItem   = NSMenuItem()   // "Not installed" / "● 3 findings"
     private let actionMenuItem   = NSMenuItem()   // "→ Open Terminal to install" / "→ Run first scan"
-    private let hookMenuItem     = NSMenuItem()   // "Setup Hook Guard" / "✓ Hook Guard active"
+    private let hookMenuItem     = NSMenuItem()   // "Injection Catcher" status
+    private let hookDisableItem  = NSMenuItem()   // "Disable" option
     private let scanMenuItem     = NSMenuItem(title: "Scan Now", action: #selector(scanNow), keyEquivalent: "s")
     private let updateMenuItem   = NSMenuItem()   // "Update available: v1.3.0" or hidden
     private var timer: Timer?
@@ -65,9 +66,13 @@ class StatusBarController: NSObject, NSMenuDelegate {
 
         menu.addItem(NSMenuItem.separator())
 
-        // Hook guard status / install
+        // Injection Catcher status / install
         hookMenuItem.target = self
         menu.addItem(hookMenuItem)
+
+        hookDisableItem.target = self
+        hookDisableItem.isHidden = true
+        menu.addItem(hookDisableItem)
 
         menu.addItem(NSMenuItem.separator())
 
@@ -307,19 +312,18 @@ class StatusBarController: NSObject, NSMenuDelegate {
     }
 
     // Shows "✓ Copied!" briefly, then restores the original label
-    private func flashCopied(command: String) {
-        let copied = NSMutableAttributedString()
-        copied.append(NSAttributedString(
+    private func flashCopied(on item: NSMenuItem, restore: NSAttributedString?) {
+        let copied = NSAttributedString(
             string: "✓ Copied — paste in Terminal",
             attributes: [
                 .foregroundColor: NSColor.systemGreen,
                 .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
             ]
-        ))
-        actionMenuItem.attributedTitle = copied
+        )
+        item.attributedTitle = copied
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            self?.actionMenuItem.attributedTitle = self?.makeActionString(command)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            item.attributedTitle = restore
         }
     }
 
@@ -347,10 +351,16 @@ class StatusBarController: NSObject, NSMenuDelegate {
             hookMenuItem.attributedTitle = makeHookActiveString()
             hookMenuItem.action = nil
             hookMenuItem.isEnabled = false
+
+            hookDisableItem.isHidden = false
+            hookDisableItem.action = #selector(copyDisableHookCommand)
+            hookDisableItem.attributedTitle = makeDisableString()
         } else {
             hookMenuItem.action = #selector(copyHookCommand)
             hookMenuItem.attributedTitle = makeActionString("npx vibe-sec setup")
             hookMenuItem.isEnabled = true
+
+            hookDisableItem.isHidden = true
         }
     }
 
@@ -364,20 +374,30 @@ class StatusBarController: NSObject, NSMenuDelegate {
             ]
         ))
         result.append(NSAttributedString(
-            string: "Hook Guard active",
+            string: "Injection Catcher active",
             attributes: [
                 .foregroundColor: NSColor.secondaryLabelColor,
                 .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize + 1),
             ]
         ))
         result.append(NSAttributedString(
-            string: "  — runs on every command, <5ms, survives restarts",
+            string: "  — every command, <5ms, survives restarts",
             attributes: [
                 .foregroundColor: NSColor.tertiaryLabelColor,
                 .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize - 1),
             ]
         ))
         return result
+    }
+
+    private func makeDisableString() -> NSAttributedString {
+        NSAttributedString(
+            string: "    Disable",
+            attributes: [
+                .foregroundColor: NSColor.tertiaryLabelColor,
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
+            ]
+        )
     }
 
     // MARK: - Copy Actions (no AppleScript, no scary permissions)
@@ -391,13 +411,23 @@ class StatusBarController: NSObject, NSMenuDelegate {
     }
 
     @objc private func copyHookCommand() {
-        copyCommand("npx vibe-sec setup")
+        let command = "npx vibe-sec setup"
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(command, forType: .string)
+        flashCopied(on: hookMenuItem, restore: makeActionString(command))
+    }
+
+    @objc private func copyDisableHookCommand() {
+        let command = "node ~/.config/vibe-sec/scripts/install-hooks.mjs --remove"
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(command, forType: .string)
+        flashCopied(on: hookDisableItem, restore: makeDisableString())
     }
 
     private func copyCommand(_ command: String) {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(command, forType: .string)
-        flashCopied(command: command)
+        flashCopied(on: actionMenuItem, restore: makeActionString(command))
     }
 
     // MARK: - Report
