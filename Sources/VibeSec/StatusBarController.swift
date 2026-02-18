@@ -5,6 +5,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
     private let menu: NSMenu
     private let statusMenuItem   = NSMenuItem()   // "Not installed" / "● 3 findings"
     private let actionMenuItem   = NSMenuItem()   // "→ Open Terminal to install" / "→ Run first scan"
+    private let hookMenuItem     = NSMenuItem()   // "Setup Hook Guard" / "✓ Hook Guard active"
     private let scanMenuItem     = NSMenuItem(title: "Scan Now", action: #selector(scanNow), keyEquivalent: "s")
     private var timer: Timer?
     private var isScanning = false
@@ -53,6 +54,12 @@ class StatusBarController: NSObject, NSMenuDelegate {
 
         menu.addItem(NSMenuItem.separator())
 
+        // Hook guard status / install
+        hookMenuItem.target = self
+        menu.addItem(hookMenuItem)
+
+        menu.addItem(NSMenuItem.separator())
+
         let reportItem = NSMenuItem(title: "Open Report", action: #selector(openReport), keyEquivalent: "o")
         reportItem.target = self
         menu.addItem(reportItem)
@@ -76,6 +83,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
         let result = ScanResultReader.read()
         updateIcon(result: result)
         updateStatusArea(result: result)
+        updateHookStatus()
     }
 
     // MARK: - Icon
@@ -214,6 +222,63 @@ class StatusBarController: NSObject, NSMenuDelegate {
         }
     }
 
+    // MARK: - Hook Guard Status
+
+    private func isHookInstalled() -> Bool {
+        let settingsFile = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent(".claude/settings.json")
+        guard let data = try? Data(contentsOf: settingsFile),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let hooks = json["hooks"] as? [String: Any],
+              let preToolUse = hooks["PreToolUse"] as? [[String: Any]] else {
+            return false
+        }
+        return preToolUse.contains { entry in
+            guard let hookList = entry["hooks"] as? [[String: Any]] else { return false }
+            return hookList.contains { h in
+                (h["command"] as? String)?.contains("hook.mjs") == true
+            }
+        }
+    }
+
+    private func updateHookStatus() {
+        if isHookInstalled() {
+            hookMenuItem.attributedTitle = makeHookActiveString()
+            hookMenuItem.action = nil
+            hookMenuItem.isEnabled = false
+        } else {
+            hookMenuItem.action = #selector(copyHookCommand)
+            hookMenuItem.attributedTitle = makeActionString("npx vibe-sec setup")
+            hookMenuItem.isEnabled = true
+        }
+    }
+
+    private func makeHookActiveString() -> NSAttributedString {
+        let result = NSMutableAttributedString()
+        result.append(NSAttributedString(
+            string: "✓ ",
+            attributes: [
+                .foregroundColor: NSColor.systemGreen,
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize + 1, weight: .medium),
+            ]
+        ))
+        result.append(NSAttributedString(
+            string: "Hook Guard active",
+            attributes: [
+                .foregroundColor: NSColor.secondaryLabelColor,
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize + 1),
+            ]
+        ))
+        result.append(NSAttributedString(
+            string: "  — runs on every command, <5ms, survives restarts",
+            attributes: [
+                .foregroundColor: NSColor.tertiaryLabelColor,
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize - 1),
+            ]
+        ))
+        return result
+    }
+
     // MARK: - Copy Actions (no AppleScript, no scary permissions)
 
     @objc private func copyInstallCommand() {
@@ -222,6 +287,10 @@ class StatusBarController: NSObject, NSMenuDelegate {
 
     @objc private func copyScanCommand() {
         copyCommand("npx vibe-sec scan")
+    }
+
+    @objc private func copyHookCommand() {
+        copyCommand("npx vibe-sec setup")
     }
 
     private func copyCommand(_ command: String) {
