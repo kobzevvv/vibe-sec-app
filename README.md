@@ -16,24 +16,30 @@ Sits in your menu bar and shows the security status of your machine at a glance:
 
 ## Install
 
-**Option A — Download (easiest)**
+**Option A — One-liner (easiest)**
+
+```bash
+curl -sL $(curl -s https://api.github.com/repos/kobzevvv/vibe-sec-app/releases/latest | grep browser_download_url | cut -d'"' -f4) -o /tmp/VibeSec.zip && unzip -oq /tmp/VibeSec.zip -d /Applications && xattr -cr /Applications/VibeSec.app && open /Applications/VibeSec.app
+```
+
+**Option B — Manual download**
 
 1. Download `VibeSec-x.x.x.zip` from [Releases](https://github.com/kobzevvv/vibe-sec-app/releases/latest)
 2. Unzip → drag `VibeSec.app` to `/Applications`
-3. Remove macOS quarantine (required — the app is not code-signed):
+3. Run in Terminal (macOS blocks unsigned apps without this):
 ```bash
 xattr -cr /Applications/VibeSec.app
 ```
 4. Double-click to open
 
-**Option B — Homebrew**
+**Option C — Homebrew**
 
 ```bash
 brew tap kobzevvv/tap
 brew install --cask vibe-sec-app
 ```
 
-**Option C — Build from source**
+**Option D — Build from source**
 
 ```bash
 git clone https://github.com/kobzevvv/vibe-sec-app
