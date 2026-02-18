@@ -38,13 +38,21 @@ class StatusBarController: NSObject, NSMenuDelegate {
     // MARK: - Menu Setup
 
     private func setupMenu() {
-        // Title
+        // Title with version
         let titleItem = NSMenuItem(title: "vibe-sec", action: nil, keyEquivalent: "")
         titleItem.isEnabled = false
-        titleItem.attributedTitle = NSAttributedString(
+        let titleStr = NSMutableAttributedString(
             string: "vibe-sec",
             attributes: [.font: NSFont.boldSystemFont(ofSize: NSFont.systemFontSize)]
         )
+        titleStr.append(NSAttributedString(
+            string: "  v\(currentVersion())",
+            attributes: [
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
+                .foregroundColor: NSColor.tertiaryLabelColor,
+            ]
+        ))
+        titleItem.attributedTitle = titleStr
         menu.addItem(titleItem)
 
         // Status line (disabled, shows current state)
