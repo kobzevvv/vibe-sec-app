@@ -7,11 +7,14 @@ class StatusBarController: NSObject, NSMenuDelegate {
     private let actionMenuItem   = NSMenuItem()   // "→ Open Terminal to install" / "→ Run first scan"
     private let hookMenuItem     = NSMenuItem()   // "Setup Hook Guard" / "✓ Hook Guard active"
     private let scanMenuItem     = NSMenuItem(title: "Scan Now", action: #selector(scanNow), keyEquivalent: "s")
+    private let updateMenuItem   = NSMenuItem()   // "Update available: v1.3.0" or hidden
     private var timer: Timer?
     private var isScanning = false
+    private var isUpdating = false
     private var reportServerProcess: Process?
     private var lastResult: ScanResult?
     private var acknowledgedScore: Int? = nil  // score user has already seen
+    private var latestVersion: String? = nil
 
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -69,6 +72,11 @@ class StatusBarController: NSObject, NSMenuDelegate {
 
         menu.addItem(NSMenuItem.separator())
 
+        // Update available (hidden by default)
+        updateMenuItem.isHidden = true
+        updateMenuItem.target = self
+        menu.addItem(updateMenuItem)
+
         let quitItem = NSMenuItem(title: "Quit vibe-sec", action: #selector(quit), keyEquivalent: "q")
         quitItem.target = self
         menu.addItem(quitItem)
@@ -84,6 +92,120 @@ class StatusBarController: NSObject, NSMenuDelegate {
         updateIcon(result: result)
         updateStatusArea(result: result)
         updateHookStatus()
+        checkForUpdates()
+    }
+
+    // MARK: - Auto-Update
+
+    private func currentVersion() -> String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"
+    }
+
+    private func checkForUpdates() {
+        let url = URL(string: "https://api.github.com/repos/kobzevvv/vibe-sec-app/releases/latest")!
+        var request = URLRequest(url: url)
+        request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = 10
+
+        URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
+            guard let self, error == nil, let data,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let tagName = json["tag_name"] as? String else { return }
+
+            let remote = tagName.hasPrefix("v") ? String(tagName.dropFirst()) : tagName
+            let local = self.currentVersion()
+
+            DispatchQueue.main.async {
+                if self.isNewer(remote: remote, local: local) {
+                    self.latestVersion = remote
+                    self.showUpdateAvailable(version: remote)
+                } else {
+                    self.updateMenuItem.isHidden = true
+                }
+            }
+        }.resume()
+    }
+
+    private func isNewer(remote: String, local: String) -> Bool {
+        let r = remote.split(separator: ".").compactMap { Int($0) }
+        let l = local.split(separator: ".").compactMap { Int($0) }
+        for i in 0..<max(r.count, l.count) {
+            let rv = i < r.count ? r[i] : 0
+            let lv = i < l.count ? l[i] : 0
+            if rv > lv { return true }
+            if rv < lv { return false }
+        }
+        return false
+    }
+
+    private func showUpdateAvailable(version: String) {
+        updateMenuItem.isHidden = false
+        updateMenuItem.action = #selector(updateApp)
+        updateMenuItem.isEnabled = true
+        let str = NSMutableAttributedString()
+        str.append(NSAttributedString(
+            string: "↑ Update available: v\(version)",
+            attributes: [
+                .foregroundColor: NSColor.systemBlue,
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize + 1, weight: .medium),
+            ]
+        ))
+        updateMenuItem.attributedTitle = str
+    }
+
+    @objc private func updateApp() {
+        guard !isUpdating, let version = latestVersion else { return }
+        isUpdating = true
+        updateMenuItem.attributedTitle = NSAttributedString(
+            string: "↑ Updating...",
+            attributes: [
+                .foregroundColor: NSColor.secondaryLabelColor,
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize + 1),
+            ]
+        )
+        updateMenuItem.isEnabled = false
+
+        let zipURL = "https://github.com/kobzevvv/vibe-sec-app/releases/download/v\(version)/VibeSec-\(version).zip"
+        let appPath = Bundle.main.bundlePath
+        let appDir = (appPath as NSString).deletingLastPathComponent
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let task = Process()
+            task.executableURL = URL(fileURLWithPath: "/bin/bash")
+            task.arguments = ["-c", """
+                curl -sL '\(zipURL)' -o /tmp/VibeSec-update.zip && \
+                unzip -oq /tmp/VibeSec-update.zip -d '\(appDir)' && \
+                xattr -cr '\(appDir)/VibeSec.app' && \
+                rm -f /tmp/VibeSec-update.zip
+                """]
+            task.standardOutput = FileHandle.nullDevice
+            task.standardError = FileHandle.nullDevice
+            do {
+                try task.run()
+                task.waitUntilExit()
+            } catch {}
+
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.isUpdating = false
+                if task.terminationStatus == 0 {
+                    // Relaunch
+                    let relaunch = Process()
+                    relaunch.executableURL = URL(fileURLWithPath: "/usr/bin/open")
+                    relaunch.arguments = ["-n", "\(appDir)/VibeSec.app"]
+                    try? relaunch.run()
+                    NSApp.terminate(nil)
+                } else {
+                    self.updateMenuItem.attributedTitle = NSAttributedString(
+                        string: "↑ Update failed — try one-liner from README",
+                        attributes: [
+                            .foregroundColor: NSColor.systemRed,
+                            .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize + 1),
+                        ]
+                    )
+                }
+            }
+        }
     }
 
     // MARK: - Icon
