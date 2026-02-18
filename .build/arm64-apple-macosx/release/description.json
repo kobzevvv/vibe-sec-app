@@ -1,0 +1,259 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.VibeSec-arm64-apple-macosx16.0-release.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/sources",
+      "importPath" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/AppDelegate.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/ScanResultReader.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/StatusBarController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/main.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "VibeSec",
+      "moduleOutputPath" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/Modules/VibeSec.swiftmodule",
+      "objects" : [
+        "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/AppDelegate.swift.o",
+        "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/ScanResultReader.swift.o",
+        "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/StatusBarController.swift.o",
+        "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/main.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-O",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-module-cache-path",
+        "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "VibeSec_main",
+        "-swift-version",
+        "5",
+        "-F",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "vibe_sec_app"
+      ],
+      "outputFileMapPath" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/AppDelegate.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/ScanResultReader.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/StatusBarController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/main.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/Modules/VibeSec.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/AppDelegate.swift",
+        "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/ScanResultReader.swift",
+        "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/StatusBarController.swift",
+        "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/main.swift"
+      ],
+      "tempsPath" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build",
+      "wholeModuleOptimization" : true
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "VibeSec" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "VibeSec",
+      "-package-name",
+      "vibe_sec_app",
+      "-whole-module-optimization",
+      "-num-threads",
+      "10",
+      "-c",
+      "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/AppDelegate.swift",
+      "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/ScanResultReader.swift",
+      "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/StatusBarController.swift",
+      "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/main.swift",
+      "-I",
+      "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-O",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-module-cache-path",
+      "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "VibeSec_main",
+      "-swift-version",
+      "5",
+      "-F",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "vibe_sec_app",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "VibeSec" : [
+
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "enableAllTraits" : false
+  },
+  "writeCommands" : {
+    "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/AppDelegate.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/ScanResultReader.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/StatusBarController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/main.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/sources"
+    },
+    "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/AppDelegate.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/ScanResultReader.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/StatusBarController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.build/main.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/VibeSec.product/Objects.LinkFileList"
+    },
+    "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"
+    }
+  }
+}

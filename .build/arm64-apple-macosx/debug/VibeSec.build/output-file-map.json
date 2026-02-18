@@ -1,0 +1,29 @@
+{
+  "": {
+    "swift-dependencies": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/master.swiftdeps"
+  },
+  "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/AppDelegate.swift": {
+    "dependencies": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/AppDelegate.d",
+    "object": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/AppDelegate.swift.o",
+    "swiftmodule": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/AppDelegate~partial.swiftmodule",
+    "swift-dependencies": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/AppDelegate.swiftdeps"
+  },
+  "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/ScanResultReader.swift": {
+    "dependencies": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/ScanResultReader.d",
+    "object": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/ScanResultReader.swift.o",
+    "swiftmodule": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/ScanResultReader~partial.swiftmodule",
+    "swift-dependencies": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/ScanResultReader.swiftdeps"
+  },
+  "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/StatusBarController.swift": {
+    "dependencies": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/StatusBarController.d",
+    "object": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/StatusBarController.swift.o",
+    "swiftmodule": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/StatusBarController~partial.swiftmodule",
+    "swift-dependencies": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/StatusBarController.swiftdeps"
+  },
+  "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/main.swift": {
+    "dependencies": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/main.d",
+    "object": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/main.swift.o",
+    "swiftmodule": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/vova/Documents/GitHub/vibe-sec-app/.build/arm64-apple-macosx/debug/VibeSec.build/main.swiftdeps"
+  }
+}

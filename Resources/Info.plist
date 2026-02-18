@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleIdentifier</key>
+    <string>com.vibesec.menubar</string>
+    <key>CFBundleName</key>
+    <string>VibeSec</string>
+    <key>CFBundleDisplayName</key>
+    <string>VibeSec</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleExecutable</key>
+    <string>VibeSec</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>LSMinimumSystemVersion</key>
+    <string>13.0</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>vibe-sec scans Documents for .env files and API keys that may have been accidentally exposed. Everything stays on your Mac — nothing is sent anywhere.</string>
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>vibe-sec checks Downloads for API key files (e.g. service account JSON) that may have been saved insecurely. Everything stays on your Mac — nothing is sent anywhere.</string>
+    <key>NSDesktopFolderUsageDescription</key>
+    <string>vibe-sec scans Desktop for .env files and credentials that may be exposed. Everything stays on your Mac — nothing is sent anywhere.</string>
+</dict>
+</plist>
