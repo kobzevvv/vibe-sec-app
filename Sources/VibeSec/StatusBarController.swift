@@ -402,32 +402,33 @@ class StatusBarController: NSObject, NSMenuDelegate {
 
     // MARK: - Copy Actions (no AppleScript, no scary permissions)
 
+    private let ghPrefix = "npx -p github:kobzevvv/vibe-sec vibe-sec"
+
     @objc private func copyInstallCommand() {
-        copyCommand("npx vibe-sec")
+        copyCommand(display: "npx vibe-sec", clipboard: ghPrefix)
     }
 
     @objc private func copyScanCommand() {
-        copyCommand("npx vibe-sec scan")
+        copyCommand(display: "npx vibe-sec scan", clipboard: "\(ghPrefix) scan")
     }
 
     @objc private func copyHookCommand() {
-        let command = "npx vibe-sec setup"
+        let display = "npx vibe-sec setup"
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(command, forType: .string)
-        flashCopied(on: hookMenuItem, restore: makeActionString(command))
+        NSPasteboard.general.setString("\(ghPrefix) setup", forType: .string)
+        flashCopied(on: hookMenuItem, restore: makeActionString(display))
     }
 
     @objc private func copyDisableHookCommand() {
-        let command = "node ~/.config/vibe-sec/scripts/install-hooks.mjs --remove"
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(command, forType: .string)
+        NSPasteboard.general.setString("\(ghPrefix) uninstall", forType: .string)
         flashCopied(on: hookDisableItem, restore: makeDisableString())
     }
 
-    private func copyCommand(_ command: String) {
+    private func copyCommand(display: String, clipboard: String) {
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(command, forType: .string)
-        flashCopied(on: actionMenuItem, restore: makeActionString(command))
+        NSPasteboard.general.setString(clipboard, forType: .string)
+        flashCopied(on: actionMenuItem, restore: makeActionString(display))
     }
 
     // MARK: - Report
