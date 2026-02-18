@@ -1,0 +1,9 @@
+.build/
+*.o
+*.d
+*.swp
+.DS_Store
+VibeSec.app/Contents/MacOS/VibeSec
+xcuserdata/
+*.xcworkspace/
+DerivedData/

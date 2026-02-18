@@ -1,9 +1,0 @@
-version: "Apple Swift version 6.1.2 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)"
-options: "667bbdd7eb43a582e5a9752d73c5fc9c18b0250b3b4d09671e710b654b5ee710"
-build_start_time: [1771431036, 805546000]
-build_end_time: [1771431038, 119727000]
-inputs:
-  "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/AppDelegate.swift": [1771416812, 222788456]
-  "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/ScanResultReader.swift": [1771416780, 188974524]
-  "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/StatusBarController.swift": [1771431025, 950574090]
-  "/Users/vova/Documents/GitHub/vibe-sec-app/Sources/VibeSec/main.swift": [1771416067, 207137044]
