@@ -11,7 +11,7 @@
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
+    <string>1.2.0</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleExecutable</key>
@@ -22,5 +22,11 @@
     <true/>
     <key>LSMinimumSystemVersion</key>
     <string>13.0</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>vibe-sec scans Documents for .env files and API keys that may have been accidentally exposed. Everything stays on your Mac — nothing is sent anywhere.</string>
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>vibe-sec checks Downloads for API key files (e.g. service account JSON) that may have been saved insecurely. Everything stays on your Mac — nothing is sent anywhere.</string>
+    <key>NSDesktopFolderUsageDescription</key>
+    <string>vibe-sec scans Desktop for .env files and credentials that may be exposed. Everything stays on your Mac — nothing is sent anywhere.</string>
 </dict>
 </plist>

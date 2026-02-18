@@ -20,7 +20,11 @@ Sits in your menu bar and shows the security status of your machine at a glance:
 
 1. Download `VibeSec-x.x.x.zip` from [Releases](https://github.com/kobzevvv/vibe-sec-app/releases/latest)
 2. Unzip → drag `VibeSec.app` to `/Applications`
-3. If macOS blocks it: **System Settings → Privacy & Security → Open Anyway**
+3. Remove macOS quarantine (required — the app is not code-signed):
+```bash
+xattr -cr /Applications/VibeSec.app
+```
+4. Double-click to open
 
 **Option B — Homebrew**
 
