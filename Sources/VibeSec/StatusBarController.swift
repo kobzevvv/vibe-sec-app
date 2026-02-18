@@ -10,7 +10,6 @@ class StatusBarController: NSObject, NSMenuDelegate {
     private let updateMenuItem   = NSMenuItem()   // "Update available: v1.3.0" or hidden
     private var timer: Timer?
     private var isScanning = false
-    private var isUpdating = false
     private var reportServerProcess: Process?
     private var lastResult: ScanResult?
     private var acknowledgedScore: Int? = nil  // score user has already seen
@@ -168,57 +167,23 @@ class StatusBarController: NSObject, NSMenuDelegate {
     }
 
     @objc private func updateApp() {
-        guard !isUpdating, let version = latestVersion else { return }
-        isUpdating = true
-        updateMenuItem.attributedTitle = NSAttributedString(
-            string: "↑ Updating...",
+        let oneLiner = "pkill -x VibeSec 2>/dev/null; curl -sL $(curl -s https://api.github.com/repos/kobzevvv/vibe-sec-app/releases/latest | grep -m1 browser_download_url | cut -d'\"' -f4) -o /tmp/VibeSec.zip && unzip -oq /tmp/VibeSec.zip -d /Applications && xattr -cr /Applications/VibeSec.app && open /Applications/VibeSec.app"
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(oneLiner, forType: .string)
+
+        let str = NSMutableAttributedString()
+        str.append(NSAttributedString(
+            string: "✓ Update command copied — paste in Terminal",
             attributes: [
-                .foregroundColor: NSColor.secondaryLabelColor,
-                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize + 1),
+                .foregroundColor: NSColor.systemGreen,
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize + 1, weight: .medium),
             ]
-        )
-        updateMenuItem.isEnabled = false
+        ))
+        updateMenuItem.attributedTitle = str
 
-        let zipURL = "https://github.com/kobzevvv/vibe-sec-app/releases/download/v\(version)/VibeSec-\(version).zip"
-        let appPath = Bundle.main.bundlePath
-        let appDir = (appPath as NSString).deletingLastPathComponent
-
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let task = Process()
-            task.executableURL = URL(fileURLWithPath: "/bin/bash")
-            task.arguments = ["-c", """
-                curl -sL '\(zipURL)' -o /tmp/VibeSec-update.zip && \
-                unzip -oq /tmp/VibeSec-update.zip -d '\(appDir)' && \
-                xattr -cr '\(appDir)/VibeSec.app' && \
-                rm -f /tmp/VibeSec-update.zip
-                """]
-            task.standardOutput = FileHandle.nullDevice
-            task.standardError = FileHandle.nullDevice
-            do {
-                try task.run()
-                task.waitUntilExit()
-            } catch {}
-
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                self.isUpdating = false
-                if task.terminationStatus == 0 {
-                    // Relaunch
-                    let relaunch = Process()
-                    relaunch.executableURL = URL(fileURLWithPath: "/usr/bin/open")
-                    relaunch.arguments = ["-n", "\(appDir)/VibeSec.app"]
-                    try? relaunch.run()
-                    NSApp.terminate(nil)
-                } else {
-                    self.updateMenuItem.attributedTitle = NSAttributedString(
-                        string: "↑ Update failed — try one-liner from README",
-                        attributes: [
-                            .foregroundColor: NSColor.systemRed,
-                            .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize + 1),
-                        ]
-                    )
-                }
-            }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+            guard let self, let version = self.latestVersion else { return }
+            self.showUpdateAvailable(version: version)
         }
     }
 
