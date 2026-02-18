@@ -259,42 +259,9 @@ class StatusBarController: NSObject, NSMenuDelegate {
 
     // MARK: - Scan
 
-    // Shows a one-time explanation of what vibe-sec reads and why, before the first scan.
-    // Returns true if the user approved, false if they cancelled.
-    private func confirmFirstScan() -> Bool {
-        let hasExplained = UserDefaults.standard.bool(forKey: "scanPermissionsExplained")
-        if hasExplained { return true }
-
-        let alert = NSAlert()
-        alert.messageText = "What vibe-sec will scan"
-        alert.informativeText = """
-To find security issues, vibe-sec reads the following — locally, on your Mac only:
-
-  ☑  Claude Code session logs  (~/.claude/)
-  ☑  Shell history             (~/.zsh_history)
-  ☑  Documents folder          (looks for .env files with leaked keys)
-  ☑  Downloads folder          (checks for API key files, service account JSON)
-
-Nothing leaves your machine. No data is sent anywhere.
-
-If you want to verify, the full source code is at:
-github.com/kobzevvv/vibe-sec
-"""
-        alert.addButton(withTitle: "Scan Now")
-        alert.addButton(withTitle: "Cancel")
-        alert.alertStyle = .informational
-
-        let response = alert.runModal()
-        if response == .alertFirstButtonReturn {
-            UserDefaults.standard.set(true, forKey: "scanPermissionsExplained")
-            return true
-        }
-        return false
-    }
-
     @objc private func scanNow() {
         guard !isScanning else { return }
-        guard confirmFirstScan() else { return }
+        guard let options = ScanPermissionPanel.present() else { return }
 
         isScanning = true
         scanMenuItem.title = "Scanning..."
@@ -307,7 +274,7 @@ github.com/kobzevvv/vibe-sec
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let task = Process()
             task.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-            task.arguments = ["node", scriptPath.path, "--static-only"]
+            task.arguments = ["node", scriptPath.path, "--static-only", "--source", "app"] + options.skipArgs
             task.currentDirectoryURL = configDir
             task.standardOutput = FileHandle.nullDevice
             task.standardError = FileHandle.nullDevice
