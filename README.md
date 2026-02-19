@@ -66,3 +66,11 @@ On first scan, the app shows exactly what it will read — with checkboxes to sk
 - System checks (open ports, firewall, screen lock)
 
 **Nothing leaves your machine.** Full source: [github.com/kobzevvv/vibe-sec](https://github.com/kobzevvv/vibe-sec)
+
+## Related Projects
+
+| Project | Platform | Description |
+|---------|----------|-------------|
+| [vibe-sec](https://github.com/kobzevvv/vibe-sec) | All | Security scanner CLI (main project) |
+| [vibe-sec-app-win](https://github.com/kobzevvv/vibe-sec-app-win) | Windows | System tray app |
+| [vibe-sec-dirty-machine](https://github.com/kobzevvv/vibe-sec-dirty-machine) | All | Test fixtures (fake secrets) |
